@@ -105,9 +105,11 @@ jobs:
         # Headers are linted via the test TUs (which #include them) thanks
         # to HeaderFilterRegex in .clang-tidy. Direct invocation on .hpp
         # without a corresponding TU often fails.
+        # Note: WarningsAsErrors is set in .clang-tidy itself; avoiding the
+        # CLI flag prevents shell-glob expansion of '*'.
         run: |
           find tests -name '*.cpp' -print0 | \
-            xargs -0 -I{} clang-tidy -p build --warnings-as-errors=* {}
+            xargs -0 -I{} clang-tidy -p build {}
 
   clang-format:
     name: clang-format

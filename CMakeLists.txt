@@ -45,11 +45,14 @@ target_compile_features(sgp INTERFACE cxx_std_20)
 # ============================================================
 add_library(sgp_warnings INTERFACE)
 if(CMAKE_CXX_COMPILER_ID MATCHES "GNU|Clang|AppleClang")
+    # Curated warning set — strict enough to catch real bugs, lenient enough
+    # to coexist with third-party headers (Catch2, googlebenchmark).
+    # Notably omitted: -Wconversion and -Wsign-conversion (too noisy across
+    # STL boundaries + third-party headers; enable per-target if needed).
     target_compile_options(sgp_warnings INTERFACE
         -Wall -Wextra -Wpedantic
         -Wshadow -Wnon-virtual-dtor -Wold-style-cast
         -Wcast-align -Wunused -Woverloaded-virtual
-        -Wconversion -Wsign-conversion
         -Wnull-dereference -Wdouble-promotion
         -Wformat=2 -Wimplicit-fallthrough
     )

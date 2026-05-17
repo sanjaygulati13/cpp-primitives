@@ -6,6 +6,13 @@ FetchContent_Declare(
 )
 FetchContent_MakeAvailable(Catch2)
 
+# Treat Catch2 headers as SYSTEM so warnings from inside them don't bubble up
+# under -Werror. Belt-and-suspenders with the curated warning set in the root.
+get_target_property(_catch2_includes Catch2::Catch2 INTERFACE_INCLUDE_DIRECTORIES)
+if(_catch2_includes)
+    set_target_properties(Catch2 PROPERTIES INTERFACE_SYSTEM_INCLUDE_DIRECTORIES "${_catch2_includes}")
+endif()
+
 add_executable(sgp_tests
     lru_cache_test.cpp
 )

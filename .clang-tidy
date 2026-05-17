@@ -18,6 +18,9 @@ Checks: >
   -readability-identifier-length,
   -readability-named-parameter,
 
+# Findings print as warnings only — we don't fail CI on third-party macro
+# expansion (Catch2 TEST_CASE etc.) firing cppcoreguidelines findings.
+# To enforce locally, run: clang-tidy --warnings-as-errors='*' --quiet ...
 WarningsAsErrors: ''
 
 HeaderFilterRegex: 'include/sgp/.*\.hpp$'
