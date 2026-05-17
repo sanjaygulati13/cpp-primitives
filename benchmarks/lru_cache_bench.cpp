@@ -3,10 +3,10 @@
 
 #include <sgp/lru_cache.hpp>
 
-#include <benchmark/benchmark.h>
-
 #include <random>
 #include <vector>
+
+#include <benchmark/benchmark.h>
 
 namespace {
 

@@ -29,9 +29,9 @@ namespace sgp {
 template <typename K, typename V, typename Hash = std::hash<K>>
 class lru_cache {
 public:
-    using key_type    = K;
-    using value_type  = V;
-    using size_type   = std::size_t;
+    using key_type = K;
+    using value_type = V;
+    using size_type = std::size_t;
 
     explicit lru_cache(size_type capacity) : capacity_(capacity) {
         assert(capacity_ > 0 && "lru_cache capacity must be > 0");
@@ -90,17 +90,11 @@ public:
         return index_.find(key) != index_.end();
     }
 
-    [[nodiscard]] auto size() const noexcept -> size_type {
-        return order_.size();
-    }
+    [[nodiscard]] auto size() const noexcept -> size_type { return order_.size(); }
 
-    [[nodiscard]] auto capacity() const noexcept -> size_type {
-        return capacity_;
-    }
+    [[nodiscard]] auto capacity() const noexcept -> size_type { return capacity_; }
 
-    [[nodiscard]] auto empty() const noexcept -> bool {
-        return order_.empty();
-    }
+    [[nodiscard]] auto empty() const noexcept -> bool { return order_.empty(); }
 
     auto clear() noexcept -> void {
         order_.clear();
@@ -109,11 +103,11 @@ public:
 
 private:
     using list_type = std::list<std::pair<K, V>>;
-    using map_type  = std::unordered_map<K, typename list_type::iterator, Hash>;
+    using map_type = std::unordered_map<K, typename list_type::iterator, Hash>;
 
     size_type capacity_;
-    list_type order_;   // front = most-recent, back = least-recent
-    map_type  index_;   // key -> iterator into order_
+    list_type order_;  // front = most-recent, back = least-recent
+    map_type index_;   // key -> iterator into order_
 };
 
 }  // namespace sgp

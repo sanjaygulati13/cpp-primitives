@@ -3,9 +3,9 @@
 
 #include <sgp/lru_cache.hpp>
 
-#include <catch2/catch_test_macros.hpp>
-
 #include <string>
+
+#include <catch2/catch_test_macros.hpp>
 
 using sgp::lru_cache;
 
@@ -50,7 +50,7 @@ TEST_CASE("put on existing key updates value and promotes", "[lru_cache]") {
     c.put(1, "one");
     c.put(2, "two");
 
-    c.put(1, "ONE");  // update + promote
+    c.put(1, "ONE");    // update + promote
     c.put(3, "three");  // evicts 2 (now LRU), not 1
 
     REQUIRE(c.contains(1));

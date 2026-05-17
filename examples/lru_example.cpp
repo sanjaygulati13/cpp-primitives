@@ -22,13 +22,13 @@ auto main() -> int {
         return name;
     };
 
-    std::cout << get_name(42) << "\n";   // miss -> fetch -> cache
-    std::cout << get_name(42) << "\n";   // hit  -> direct from cache
+    std::cout << get_name(42) << "\n";  // miss -> fetch -> cache
+    std::cout << get_name(42) << "\n";  // hit  -> direct from cache
     std::cout << "cache size: " << cache.size() << "\n";
 
     for (int i = 0; i < 150; ++i) {
         get_name(i);
     }
-    std::cout << "after 150 inserts: " << cache.size() << " (capped at "
-              << cache.capacity() << ")\n";
+    std::cout << "after 150 inserts: " << cache.size() << " (capped at " << cache.capacity()
+              << ")\n";
 }

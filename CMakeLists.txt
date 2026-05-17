@@ -19,12 +19,13 @@ endif()
 set(CMAKE_EXPORT_COMPILE_COMMANDS ON)
 
 # Options
-option(SGP_BUILD_TESTS      "Build unit tests"             OFF)
-option(SGP_BUILD_BENCHMARKS "Build micro-benchmarks"       OFF)
-option(SGP_BUILD_EXAMPLES   "Build runnable examples"      OFF)
-option(SGP_ENABLE_ASAN      "Enable AddressSanitizer"      OFF)
-option(SGP_ENABLE_UBSAN     "Enable UB Sanitizer"          OFF)
-option(SGP_ENABLE_TSAN      "Enable ThreadSanitizer"       OFF)
+option(SGP_BUILD_TESTS         "Build unit tests"            OFF)
+option(SGP_BUILD_BENCHMARKS    "Build micro-benchmarks"      OFF)
+option(SGP_BUILD_EXAMPLES      "Build runnable examples"     OFF)
+option(SGP_ENABLE_ASAN         "Enable AddressSanitizer"     OFF)
+option(SGP_ENABLE_UBSAN        "Enable UB Sanitizer"         OFF)
+option(SGP_ENABLE_TSAN         "Enable ThreadSanitizer"      OFF)
+option(SGP_WARNINGS_AS_ERRORS  "Treat warnings as errors"    OFF)
 
 # ============================================================
 # The header-only library target
