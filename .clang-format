@@ -1,0 +1,54 @@
+---
+# Based on LLVM style with modern adjustments
+BasedOnStyle: LLVM
+Standard: c++20
+
+# Indentation
+IndentWidth: 4
+TabWidth: 4
+UseTab: Never
+ContinuationIndentWidth: 4
+NamespaceIndentation: None
+AccessModifierOffset: -4
+
+# Line length
+ColumnLimit: 100
+
+# Pointer / reference alignment
+PointerAlignment: Left
+ReferenceAlignment: Left
+
+# Braces
+BreakBeforeBraces: Attach
+AllowShortFunctionsOnASingleLine: InlineOnly
+AllowShortIfStatementsOnASingleLine: Never
+AllowShortLoopsOnASingleLine: false
+
+# Spaces
+SpaceBeforeParens: ControlStatements
+SpacesBeforeTrailingComments: 2
+SpacesInAngles: false
+SpacesInContainerLiterals: false
+
+# Includes
+IncludeBlocks: Regroup
+IncludeCategories:
+  - Regex: '^<sgp/'
+    Priority: 1
+  - Regex: '^<[a-z_]+>'  # standard headers
+    Priority: 2
+  - Regex: '^<.*>'        # other system headers
+    Priority: 3
+  - Regex: '.*'           # local headers
+    Priority: 4
+SortIncludes: CaseInsensitive
+
+# Other
+FixNamespaceComments: true
+ReflowComments: true
+KeepEmptyLinesAtTheStartOfBlocks: false
+AlwaysBreakTemplateDeclarations: Yes
+BinPackArguments: false
+BinPackParameters: false
+AllowAllParametersOfDeclarationOnNextLine: false
+AlignAfterOpenBracket: BlockIndent

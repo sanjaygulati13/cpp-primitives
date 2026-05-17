@@ -1,0 +1,47 @@
+# Build directories
+build/
+build-*/
+cmake-build-*/
+out/
+
+# IDE
+.vscode/
+.idea/
+*.swp
+*.swo
+.cache/
+
+# OS
+.DS_Store
+Thumbs.db
+
+# CMake
+CMakeCache.txt
+CMakeFiles/
+CMakeScripts/
+cmake_install.cmake
+install_manifest.txt
+Makefile
+compile_commands.json
+
+# Compiler artifacts
+*.o
+*.obj
+*.a
+*.lib
+*.so
+*.dylib
+*.dll
+*.exe
+
+# Test artifacts
+Testing/
+*.gcov
+*.gcda
+*.gcno
+coverage.info
+coverage/
+
+# Benchmark artifacts
+*_perf.data
+*.flamegraph.svg

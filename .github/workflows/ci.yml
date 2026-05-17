@@ -1,0 +1,119 @@
+name: CI
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+    branches: [main]
+
+jobs:
+  build-test:
+    name: Build & test (${{ matrix.compiler }} · ${{ matrix.build_type }})
+    runs-on: ubuntu-latest
+    strategy:
+      fail-fast: false
+      matrix:
+        compiler: [gcc, clang]
+        build_type: [Debug, Release]
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Install build tools
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y cmake ninja-build
+          if [ "${{ matrix.compiler }}" = "clang" ]; then
+            sudo apt-get install -y clang
+            echo "CC=clang"   >> $GITHUB_ENV
+            echo "CXX=clang++" >> $GITHUB_ENV
+          else
+            echo "CC=gcc"   >> $GITHUB_ENV
+            echo "CXX=g++"  >> $GITHUB_ENV
+          fi
+
+      - name: Configure
+        run: cmake -B build -G Ninja
+            -DCMAKE_BUILD_TYPE=${{ matrix.build_type }}
+            -DSGP_BUILD_TESTS=ON
+            -DSGP_BUILD_EXAMPLES=ON
+            -DSGP_WARNINGS_AS_ERRORS=ON
+
+      - name: Build
+        run: cmake --build build
+
+      - name: Run tests
+        run: ctest --test-dir build --output-on-failure
+
+  sanitizers:
+    name: Sanitizers (${{ matrix.sanitizer }})
+    runs-on: ubuntu-latest
+    strategy:
+      fail-fast: false
+      matrix:
+        sanitizer: [asan-ubsan, tsan]
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Install tools
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y cmake ninja-build clang
+          echo "CC=clang"   >> $GITHUB_ENV
+          echo "CXX=clang++" >> $GITHUB_ENV
+
+      - name: Configure (${{ matrix.sanitizer }})
+        run: |
+          if [ "${{ matrix.sanitizer }}" = "asan-ubsan" ]; then
+            cmake -B build -G Ninja \
+              -DCMAKE_BUILD_TYPE=Debug \
+              -DSGP_BUILD_TESTS=ON \
+              -DSGP_ENABLE_ASAN=ON \
+              -DSGP_ENABLE_UBSAN=ON
+          else
+            cmake -B build -G Ninja \
+              -DCMAKE_BUILD_TYPE=Debug \
+              -DSGP_BUILD_TESTS=ON \
+              -DSGP_ENABLE_TSAN=ON
+          fi
+
+      - name: Build
+        run: cmake --build build
+
+      - name: Run tests
+        run: ctest --test-dir build --output-on-failure
+
+  clang-tidy:
+    name: clang-tidy
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Install
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y cmake ninja-build clang clang-tidy
+      - name: Configure
+        run: |
+          cmake -B build -G Ninja \
+            -DCMAKE_BUILD_TYPE=Debug \
+            -DSGP_BUILD_TESTS=ON \
+            -DCMAKE_CXX_COMPILER=clang++ \
+            -DCMAKE_EXPORT_COMPILE_COMMANDS=ON
+      - name: Build (to materialize compile_commands)
+        run: cmake --build build
+      - name: Run clang-tidy on headers
+        run: |
+          find include -name '*.hpp' -print0 | \
+            xargs -0 -I{} clang-tidy -p build {}
+
+  clang-format:
+    name: clang-format
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Install
+        run: sudo apt-get update && sudo apt-get install -y clang-format
+      - name: Check formatting
+        run: |
+          find include tests benchmarks examples \
+            -name '*.hpp' -o -name '*.cpp' | \
+            xargs clang-format --dry-run --Werror
